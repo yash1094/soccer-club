@@ -1,0 +1,39 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import PlayerCard from "../../components/PlayerCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+    return [
+        { params: { club: "galacticosc" } },
+        { params: { club: "acesfc" } },
+    ];
+}
+
+const { club } = Astro.params;
+
+const players = (await getCollection("players"))
+    .filter((p) => p.data.club === club)
+    .sort((a, b) => a.data.number - b.data.number);
+---
+
+<BaseLayout
+    title={`${club === "galacticosc" ? "Galactico SC" : "Aces FC"} Roster`}
+    description="Meet the players."
+>
+    <Header />
+
+    <main class="px-4 py-12">
+        <h1 class="font-heading text-3xl uppercase mb-6">
+            {club === "galacticosc" ? "Galactico SC Roster" : "Aces FC Roster"}
+        </h1>
+
+        <section class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {players.map((player) => <PlayerCard player={player} />)}
+        </section>
+    </main>
+
+    <Footer />
+</BaseLayout>

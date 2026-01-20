@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+    player: CollectionEntry<"players">;
+}
+
+const { player } = Astro.props as Props;
+const { name, number, position, image } = player.data;
+---
+
+<a href={`/players/${player.slug}`} class="block border dark:border-slate-700">
+    <div class="aspect-3/4 bg-slate-200 dark:bg-slate-700">
+        <img
+            src={image}
+            alt={name}
+            loading="lazy"
+            class="h-full w-full object-cover"
+        />
+    </div>
+
+    <div class="p-3">
+        <p class="text-xs uppercase text-slate-500">{position}</p>
+        <h3 class="font-heading font-bold">{number} · {name}</h3>
+    </div>
+</a>
